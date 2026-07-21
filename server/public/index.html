@@ -56,6 +56,74 @@
     width:20px; height:20px; border-radius:50%; background:var(--gold-bright); color:#2a1c00;
     display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; cursor:pointer; flex-shrink:0;
   }
+  .sound-toggle{
+    width:30px; height:30px; border-radius:50%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.15);
+    display:flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer; flex-shrink:0; margin-left:6px;
+  }
+
+  /* ===== 최근 라운드 히스토리 ===== */
+  .history-strip{ display:flex; gap:6px; justify-content:center; margin:2px 0 10px; min-height:18px; }
+  .history-dot{
+    width:16px; height:16px; border-radius:50%; font-size:9px; font-weight:800;
+    display:flex; align-items:center; justify-content:center; color:#fff;
+  }
+  .history-dot.win{ background:#2f9e63; }
+  .history-dot.lose{ background:#b5433f; }
+  .history-dot.push{ background:#8a7a3a; }
+
+  /* ===== 무료 칩 카드 ===== */
+  .free-chip-card{
+    display:flex; align-items:center; gap:12px; padding:14px 15px; border-radius:16px;
+    background:linear-gradient(135deg, rgba(49,230,166,0.12), rgba(0,0,0,0.2)); border:1px solid rgba(49,230,166,0.35);
+    margin-bottom:16px;
+  }
+  .free-chip-icon{ font-size:26px; }
+  .free-chip-info{ flex:1; font-size:12.5px; }
+  .free-chip-info b{ color:var(--glow); font-size:14px; display:block; margin-bottom:2px; }
+
+  /* ===== 홈 화면 ===== */
+  .home-wallet-row{ display:flex; gap:10px; margin:14px 0 18px; }
+  .home-wallet-card{
+    flex:1; display:flex; align-items:center; gap:10px; padding:14px; border-radius:16px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.14)); border:1px solid rgba(255,255,255,0.08);
+  }
+  .home-wallet-card .hw-icon{ font-size:24px; }
+  .hw-label{ font-size:10.5px; opacity:0.6; }
+  .hw-value{ font-weight:800; font-size:17px; }
+  .home-wallet-card.chip .hw-value{ color:var(--gold-bright); }
+  .home-wallet-card.dia .hw-value{ color:var(--dia); }
+
+  .stats-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:6px; }
+  .stat-box{ text-align:center; padding:10px 4px; border-radius:12px; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.07); }
+  .stat-box .stat-value{ font-weight:800; font-size:16px; color:var(--gold-bright); }
+  .stat-box .stat-label{ font-size:10px; opacity:0.6; margin-top:2px; }
+
+  .popular-row{
+    display:flex; align-items:center; gap:10px; padding:11px 13px; border-radius:14px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.14)); border:1px solid rgba(255,255,255,0.07);
+    margin-bottom:8px; cursor:pointer;
+  }
+  .popular-rank{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:16px; color:var(--gold); width:20px; }
+
+  /* ===== 마이페이지 ===== */
+  .profile-card{
+    display:flex; align-items:center; gap:12px; padding:16px; border-radius:18px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.14)); border:1px solid rgba(255,255,255,0.08);
+    margin:14px 0 10px;
+  }
+  .profile-avatar{ width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px;
+    background:radial-gradient(circle at 35% 30%, #4a6a56, #1c2e26); border:2px solid var(--gold-dim); }
+  .profile-info{ flex:1; }
+  .profile-name{ font-weight:800; font-size:15px; }
+  .profile-sub{ font-size:11px; opacity:0.55; margin-top:2px; }
+  .edit-name-row{ display:flex; gap:8px; margin-bottom:16px; }
+  .edit-name-row input{ margin-bottom:0; }
+  .settings-row{
+    display:flex; align-items:center; justify-content:space-between; padding:13px 15px; border-radius:14px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.14)); border:1px solid rgba(255,255,255,0.07);
+    margin-bottom:9px; font-size:13px;
+  }
+  .settings-row.danger{ cursor:pointer; color:#ff9b9b; border-color:rgba(255,120,120,0.3); }
 
   /* ===== 본문 영역 ===== */
   .screen{ flex:1; padding:14px 14px 90px; overflow-y:auto; }
@@ -94,6 +162,23 @@
   .status-lobby{ background:rgba(232,178,61,0.15); color:var(--gold-bright); border:1px solid var(--gold-dim); }
   .status-playing{ background:rgba(49,230,166,0.12); color:var(--glow); border:1px solid rgba(49,230,166,0.4); }
   .note{ font-size:11px; opacity:0.5; text-align:center; margin-top:14px; line-height:1.7; }
+
+  .quick-match-btn{
+    background:linear-gradient(180deg, #ffe28a, #e8b23d 55%, #8a5f13);
+    margin-bottom:18px; font-size:15px; padding:16px 24px;
+    box-shadow:0 5px 0 var(--gold-dim), 0 10px 22px rgba(232,178,61,0.35), inset 0 1px 0 rgba(255,255,255,0.7);
+  }
+  .room-card{
+    display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:14px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.14)); border:1px solid rgba(255,255,255,0.07);
+    margin-bottom:9px; cursor:pointer; transition:transform .12s;
+  }
+  .room-card:hover{ transform:translateY(-2px); }
+  .room-card.full{ opacity:0.4; cursor:not-allowed; }
+  .room-card-icon{ width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px;
+    background:linear-gradient(160deg, var(--wood-1), var(--wood-3)); border:1px solid var(--gold-dim); flex-shrink:0; }
+  .room-card-name{ font-weight:700; font-size:13.5px; flex:1; }
+  .room-card-count{ font-size:11px; opacity:0.6; }
 
   /* ===== 마켓 ===== */
   .market-section-title{ font-size:13px; font-weight:700; color:var(--gold-bright); margin:18px 0 10px; display:flex; align-items:center; gap:6px; }
@@ -242,6 +327,7 @@
       <div class="currency-pill dia"><span class="cur-icon dia"></span><span id="diaBalance">0</span></div>
       <div class="add-btn" id="addDiaBtn">+</div>
     </div>
+    <div class="sound-toggle" id="soundToggle">🔊</div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -254,18 +340,61 @@
     <button class="btn" id="nameConfirmBtn">시작하기</button>
   </div>
 
-  <!-- 화면 1: 로비 -->
+  <!-- 화면: 홈 -->
+  <div class="screen hidden" id="screen-home">
+    <h2 class="page-title" id="homeGreeting">안녕하세요 👋</h2>
+    <div class="page-sub">오늘도 좋은 패 만나시길 바라요</div>
+
+    <div class="home-wallet-row">
+      <div class="home-wallet-card chip">
+        <div class="hw-icon">🪙</div>
+        <div class="hw-info"><div class="hw-label">보유 칩</div><div class="hw-value" id="homeChip">0</div></div>
+      </div>
+      <div class="home-wallet-card dia">
+        <div class="hw-icon">💎</div>
+        <div class="hw-info"><div class="hw-label">보유 다이아</div><div class="hw-value" id="homeDia">0</div></div>
+      </div>
+    </div>
+
+    <button class="btn quick-match-btn" id="homePlayBtn">🃏 포크덩 하러가기</button>
+
+    <div class="market-section-title">📊 나의 전적</div>
+    <div class="stats-grid" id="homeStats"></div>
+
+    <div class="market-section-title">🔥 인기 테이블</div>
+    <div id="homePopular"></div>
+  </div>
+
+  <!-- 화면 1: 로비 (티어 목록) -->
   <div class="screen hidden" id="screen-lobby">
     <h2 class="page-title">로비</h2>
-    <div class="page-sub">배팅금액에 맞는 테이블을 선택하세요</div>
+    <div class="page-sub">배팅금액에 맞는 단계를 선택하세요</div>
     <div id="tiersList"></div>
-    <div class="note">2명 이상 모이면 잠시 후 자동으로 라운드가 시작됩니다.</div>
+  </div>
+
+  <!-- 화면 1b: 티어 상세 (빠른 매칭 / 방 목록) -->
+  <div class="screen hidden" id="screen-tier-detail">
+    <span class="back-link" id="tierBackBtn">← 로비</span>
+    <h2 class="page-title" id="tierDetailTitle">단계</h2>
+    <div class="page-sub" id="tierDetailSub">최소 베팅 - 칩</div>
+
+    <button class="btn quick-match-btn" id="quickMatchBtn">⚡ 빠른 매칭으로 입장</button>
+
+    <div class="market-section-title">🚪 방 직접 선택</div>
+    <div id="roomsList"></div>
+    <div class="note">2명 이상 모이면 잠시 후 자동으로 라운드가 시작됩니다. 방이 가득 차면 새 방이 자동으로 열려요.</div>
   </div>
 
   <!-- 화면 2: 마켓 -->
   <div class="screen hidden" id="screen-market">
     <h2 class="page-title">마켓</h2>
     <div class="page-sub">다이아 구매 및 칩 교환</div>
+
+    <div class="free-chip-card">
+      <div class="free-chip-icon">🎁</div>
+      <div class="free-chip-info"><b>무료 칩 받기</b>4시간마다 한 번, 칩이 부족할 때 활용하세요</div>
+      <button class="btn small" id="freeChipBtn">받기</button>
+    </div>
 
     <div class="market-section-title">💎 다이아 구매 (App Store / Google Play)</div>
     <div class="package-grid" id="diaPackages"></div>
@@ -276,12 +405,45 @@
     <div class="note">다이아 구매는 실제 앱스토어/구글플레이 결제로 진행됩니다 (지금은 테스트용 화면). 칩은 게임 베팅 전용이며 현금으로 교환/환전할 수 없습니다.</div>
   </div>
 
+  <!-- 화면: 마이페이지 -->
+  <div class="screen hidden" id="screen-mypage">
+    <h2 class="page-title">마이페이지</h2>
+
+    <div class="profile-card">
+      <div class="profile-avatar">🧑</div>
+      <div class="profile-info">
+        <div class="profile-name" id="profileNameDisplay">플레이어</div>
+        <div class="profile-sub">닉네임 변경 가능</div>
+      </div>
+      <button class="btn small" id="editNameBtn">변경</button>
+    </div>
+    <div class="edit-name-row hidden" id="editNameRow">
+      <input id="editNameInput" placeholder="새 닉네임" maxlength="12">
+      <button class="btn small" id="saveNameBtn">저장</button>
+    </div>
+
+    <div class="market-section-title">📊 누적 전적</div>
+    <div class="stats-grid" id="mypageStats"></div>
+
+    <div class="market-section-title">⚙️ 설정</div>
+    <div class="settings-row">
+      <span>🔊 사운드 효과</span>
+      <button class="btn small" id="mypageSoundBtn">켜짐</button>
+    </div>
+    <div class="settings-row danger" id="resetDataBtn">
+      <span>🗑️ 데이터 초기화 (새 계정으로 시작)</span>
+    </div>
+
+    <div class="note">이 앱은 실제 현금 지급/환전이 불가능한 소셜 카드게임입니다.</div>
+  </div>
+
   <!-- 화면 3: 게임(테이블) -->
   <div class="screen hidden" id="screen-game" style="padding-top:8px;">
     <div class="table-topbar">
       <span class="back-link" id="leaveBtn">← 로비로</span>
       <span class="countdown hidden" id="countdownMsg"></span>
     </div>
+
 
     <div class="table-frame">
       <div class="table-felt" id="tableFelt">
@@ -296,6 +458,7 @@
       <div class="my-name" id="myNameTag">나</div>
     </div>
 
+    <div class="history-strip" id="historyStrip"></div>
     <div class="center-msg" id="gameMsg">대기 중...</div>
 
     <div class="bet-row hidden" id="betRow">
@@ -312,8 +475,10 @@
   </div>
 
   <div class="tabbar hidden" id="tabbar">
-    <button class="tab-btn active" data-tab="lobby"><span class="tab-icon">🏠</span>로비</button>
+    <button class="tab-btn" data-tab="home"><span class="tab-icon">🏠</span>홈</button>
+    <button class="tab-btn active" data-tab="lobby"><span class="tab-icon">🃏</span>포크덩</button>
     <button class="tab-btn" data-tab="market"><span class="tab-icon">💎</span>마켓</button>
+    <button class="tab-btn" data-tab="mypage"><span class="tab-icon">👤</span>마이페이지</button>
   </div>
 </div>
 
@@ -326,11 +491,54 @@
 
 <script>
 const socket = io();
-let myId = null;
 let myName = '';
 let currentBet = 0;
 let countdownInterval = null;
-let marketData = { diamondPackages: [], exchangeRates: [] };
+let marketData = { diamondPackages: [], exchangeRates: [], freeChipAmount: 500, freeChipCooldownMs: 4*60*60*1000 };
+let roundHistory = [];
+let prevChips = null, prevDia = null;
+
+// ===== 사운드 (외부 파일 없이 Web Audio로 생성) =====
+let soundOn = true;
+let audioCtx = null;
+function ensureAudio(){ if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function tone(freq, dur, delay=0, type='sine', vol=0.18){
+  if(!soundOn) return;
+  const ctx = ensureAudio();
+  const t0 = ctx.currentTime + delay;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type; osc.frequency.setValueAtTime(freq, t0);
+  gain.gain.setValueAtTime(vol, t0);
+  gain.gain.exponentialRampToValueAtTime(0.001, t0+dur);
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.start(t0); osc.stop(t0+dur);
+}
+const Sound = {
+  deal:  ()=> tone(700, 0.06, 0, 'square', 0.1),
+  chip:  ()=>{ tone(900,0.05,0,'square',0.12); tone(1200,0.05,0.05,'square',0.1); },
+  win:   ()=>{ tone(523,0.12,0); tone(659,0.12,0.1); tone(784,0.2,0.2); },
+  lose:  ()=>{ tone(300,0.18,0,'sawtooth',0.12); tone(220,0.25,0.15,'sawtooth',0.1); },
+  pok:   ()=>{ tone(659,0.1,0); tone(784,0.1,0.08); tone(988,0.22,0.16); }
+};
+document.getElementById('soundToggle').onclick = ()=>{
+  soundOn = !soundOn;
+  document.getElementById('soundToggle').textContent = soundOn ? '🔊' : '🔇';
+};
+
+// ===== 숫자 카운트업 애니메이션 =====
+function animateCount(el, from, to, duration=600){
+  if(from===to){ el.textContent = to.toLocaleString(); return; }
+  const start = performance.now();
+  function step(now){
+    const p = Math.min(1, (now-start)/duration);
+    const eased = 1 - Math.pow(1-p, 3);
+    const val = Math.round(from + (to-from)*eased);
+    el.textContent = val.toLocaleString();
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
 
 function showToast(text){
   const t = document.getElementById('toast');
@@ -340,12 +548,15 @@ function showToast(text){
 }
 
 function switchTab(name){
-  ['lobby','market','game'].forEach(s=>{
+  ['home','lobby','market','mypage','game'].forEach(s=>{
     document.getElementById('screen-'+s).classList.toggle('hidden', s!==name);
   });
+  document.getElementById('screen-tier-detail').classList.add('hidden');
   document.querySelectorAll('.tab-btn').forEach(b=> b.classList.toggle('active', b.dataset.tab===name));
   document.getElementById('tabbar').classList.toggle('hidden', name==='game');
   if(name==='lobby') socket.emit('getLobby');
+  if(name==='home') renderHome();
+  if(name==='mypage') renderMyPage();
 }
 document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.onclick = ()=> switchTab(btn.dataset.tab);
@@ -354,37 +565,179 @@ document.getElementById('addDiaBtn').onclick = ()=> switchTab('market');
 
 fetch('/api/market').then(r=>r.json()).then(data=>{
   marketData = data;
+  document.querySelector('.free-chip-info').innerHTML = `<b>무료 칩 받기</b>4시간마다 한 번, 칩 ${data.freeChipAmount.toLocaleString()}개를 무료로 받으세요`;
   renderMarket();
+  updateFreeChipButton();
+});
+
+// ===== 영구 식별자(clientId) 및 재접속 처리 =====
+let myClientId = localStorage.getItem('pokdeng_client_id') || null;
+myName = localStorage.getItem('pokdeng_name') || '';
+
+socket.on('connect', ()=>{
+  socket.emit('identify', { clientId: myClientId, name: myName || undefined });
+});
+socket.on('identified', ({ clientId })=>{
+  myClientId = clientId;
+  localStorage.setItem('pokdeng_client_id', clientId);
+  // 저장된 닉네임이 있으면 닉네임 입력 화면을 건너뜀
+  if(myName && document.getElementById('screen-name').classList.contains('hidden')===false){
+    document.getElementById('screen-name').classList.add('hidden');
+    document.getElementById('statusbar').style.display = 'flex';
+    document.getElementById('tabbar').classList.remove('hidden');
+    switchTab('home');
+  }
+});
+socket.on('reconnectedToRoom', ()=>{
+  document.getElementById('screen-name').classList.add('hidden');
+  document.getElementById('statusbar').style.display = 'flex';
+  document.getElementById('tabbar').classList.remove('hidden');
+  switchTab('game');
+  showToast('🔄 이전 방으로 재접속했어요');
 });
 
 document.getElementById('nameConfirmBtn').onclick = ()=>{
   myName = document.getElementById('nameInput').value.trim() || '플레이어';
+  localStorage.setItem('pokdeng_name', myName);
   document.getElementById('screen-name').classList.add('hidden');
   document.getElementById('statusbar').style.display = 'flex';
   document.getElementById('tabbar').classList.remove('hidden');
-  switchTab('lobby');
+  switchTab('home');
 };
+
+document.getElementById('homePlayBtn').onclick = ()=> switchTab('lobby');
 
 document.getElementById('leaveBtn').onclick = ()=>{
   socket.emit('leaveTable');
-  switchTab('lobby');
+  switchTab('home');
 };
 document.getElementById('hitBtn').onclick = ()=> socket.emit('decision', {action:'hit'});
 document.getElementById('stayBtn').onclick = ()=> socket.emit('decision', {action:'stay'});
 document.querySelectorAll('.chip-stack').forEach(chip=>{
-  chip.onclick = ()=>{ currentBet += parseInt(chip.dataset.v); socket.emit('placeBet', { amount: currentBet }); };
+  chip.onclick = ()=>{ Sound.chip(); currentBet += parseInt(chip.dataset.v); socket.emit('placeBet', { amount: currentBet }); };
 });
 
-socket.on('connect', ()=> myId = socket.id);
 socket.on('errorMsg', (msg)=> showToast('⚠️ ' + msg));
 socket.on('purchaseSuccess', (p)=>{
   showToast(p.type==='diamond' ? `💎 다이아 +${p.amount} 획득!` : `🪙 칩 +${p.amount.toLocaleString()} 획득!`);
 });
 
 socket.on('walletUpdate', (w)=>{
-  document.getElementById('chipBalance').textContent = w.chips.toLocaleString();
-  document.getElementById('diaBalance').textContent = w.diamonds.toLocaleString();
+  const chipEl = document.getElementById('chipBalance');
+  const diaEl = document.getElementById('diaBalance');
+  animateCount(chipEl, prevChips===null ? w.chips : prevChips, w.chips);
+  animateCount(diaEl, prevDia===null ? w.diamonds : prevDia, w.diamonds);
+  prevChips = w.chips; prevDia = w.diamonds;
+  window.currentWallet = w;
+  updateFreeChipButton();
+  if(!document.getElementById('screen-home').classList.contains('hidden')) renderHome();
+  if(!document.getElementById('screen-mypage').classList.contains('hidden')) renderMyPage();
 });
+
+function renderHome(){
+  const w = window.currentWallet;
+  document.getElementById('homeGreeting').textContent = `안녕하세요, ${myName || '플레이어'}님 👋`;
+  if(w){
+    animateCount(document.getElementById('homeChip'), w.chips, w.chips);
+    animateCount(document.getElementById('homeDia'), w.diamonds, w.diamonds);
+    const st = w.stats || {roundsPlayed:0,wins:0,losses:0,pushes:0};
+    const winRate = st.roundsPlayed>0 ? Math.round(st.wins/st.roundsPlayed*100) : 0;
+    document.getElementById('homeStats').innerHTML = `
+      <div class="stat-box"><div class="stat-value">${st.roundsPlayed}</div><div class="stat-label">총 판수</div></div>
+      <div class="stat-box"><div class="stat-value">${st.wins}</div><div class="stat-label">승</div></div>
+      <div class="stat-box"><div class="stat-value">${st.losses}</div><div class="stat-label">패</div></div>
+      <div class="stat-box"><div class="stat-value">${winRate}%</div><div class="stat-label">승률</div></div>
+    `;
+  }
+  const popEl = document.getElementById('homePopular');
+  popEl.innerHTML = '';
+  if(currentTierData){
+    const ranked = currentTierData
+      .map(t=>({ t, total: t.rooms.reduce((s,r)=>s+r.playerCount,0) }))
+      .sort((a,b)=>b.total-a.total)
+      .slice(0,3);
+    ranked.forEach((entry,i)=>{
+      const row = document.createElement('div');
+      row.className = 'popular-row';
+      row.innerHTML = `
+        <div class="popular-rank">${i+1}</div>
+        <div class="tier-icon" style="width:34px;height:34px;font-size:16px;">${entry.t.icon}</div>
+        <div class="tier-info"><div class="tier-name">${entry.t.name}</div><div class="tier-meta">최소 ${entry.t.minBet.toLocaleString()} 칩 · ${entry.total}명 접속중</div></div>
+      `;
+      row.onclick = ()=>{ switchTab('lobby'); openTierDetail(entry.t.id); };
+      popEl.appendChild(row);
+    });
+  } else {
+    socket.emit('getLobby');
+  }
+}
+
+function renderMyPage(){
+  document.getElementById('profileNameDisplay').textContent = myName || '플레이어';
+  const w = window.currentWallet;
+  if(w){
+    const st = w.stats || {roundsPlayed:0,wins:0,losses:0,pushes:0};
+    const winRate = st.roundsPlayed>0 ? Math.round(st.wins/st.roundsPlayed*100) : 0;
+    document.getElementById('mypageStats').innerHTML = `
+      <div class="stat-box"><div class="stat-value">${st.roundsPlayed}</div><div class="stat-label">총 판수</div></div>
+      <div class="stat-box"><div class="stat-value">${st.wins}</div><div class="stat-label">승</div></div>
+      <div class="stat-box"><div class="stat-value">${st.losses}</div><div class="stat-label">패</div></div>
+      <div class="stat-box"><div class="stat-value">${winRate}%</div><div class="stat-label">승률</div></div>
+    `;
+  }
+  document.getElementById('mypageSoundBtn').textContent = soundOn ? '켜짐' : '꺼짐';
+}
+
+document.getElementById('editNameBtn').onclick = ()=>{
+  document.getElementById('editNameRow').classList.toggle('hidden');
+  document.getElementById('editNameInput').value = myName;
+};
+document.getElementById('saveNameBtn').onclick = ()=>{
+  const val = document.getElementById('editNameInput').value.trim();
+  if(!val) return;
+  myName = val.slice(0,12);
+  localStorage.setItem('pokdeng_name', myName);
+  socket.emit('updateName', { name: myName });
+  document.getElementById('editNameRow').classList.add('hidden');
+  renderMyPage();
+  showToast('닉네임이 변경됐어요');
+};
+document.getElementById('mypageSoundBtn').onclick = ()=>{
+  soundOn = !soundOn;
+  document.getElementById('soundToggle').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('mypageSoundBtn').textContent = soundOn ? '켜짐' : '꺼짐';
+};
+document.getElementById('resetDataBtn').onclick = ()=>{
+  if(confirm('정말 초기화할까요? 현재 지갑과 닉네임 정보가 모두 사라지고 새 계정으로 시작합니다.')){
+    localStorage.removeItem('pokdeng_client_id');
+    localStorage.removeItem('pokdeng_name');
+    location.reload();
+  }
+};
+
+let freeChipInterval = null;
+function updateFreeChipButton(){
+  const btn = document.getElementById('freeChipBtn');
+  if(!btn || !window.currentWallet) return;
+  const elapsed = Date.now() - (window.currentWallet.lastFreeClaim || 0);
+  const remaining = marketData.freeChipCooldownMs - elapsed;
+  if(freeChipInterval) clearInterval(freeChipInterval);
+  if(remaining > 0){
+    btn.disabled = true;
+    const tick = ()=>{
+      const r = marketData.freeChipCooldownMs - (Date.now() - (window.currentWallet.lastFreeClaim||0));
+      if(r<=0){ btn.disabled=false; btn.textContent='받기'; clearInterval(freeChipInterval); return; }
+      const m = Math.floor(r/60000), s = Math.floor((r%60000)/1000);
+      btn.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+    };
+    tick();
+    freeChipInterval = setInterval(tick, 1000);
+  } else {
+    btn.disabled = false;
+    btn.textContent = '받기';
+  }
+}
+document.getElementById('freeChipBtn').onclick = ()=> socket.emit('claimFreeChips');
 
 function renderMarket(){
   const pkgEl = document.getElementById('diaPackages');
@@ -432,32 +785,114 @@ const SEAT_LAYOUTS = {
   5: [{l:10,t:66},{l:26,t:30},{l:50,t:12},{l:74,t:30},{l:90,t:66}]
 };
 
+let currentTierData = null; // 마지막으로 받은 로비 데이터 (티어 상세 화면 갱신용)
+let openTierId = null; // 현재 티어 상세 화면에 열려있는 티어
+
 socket.on('lobbyUpdate', (tiers)=>{
-  if(document.getElementById('screen-lobby').classList.contains('hidden')) return;
-  const listEl = document.getElementById('tiersList');
+  currentTierData = tiers;
+
+  if(!document.getElementById('screen-lobby').classList.contains('hidden')){
+    const listEl = document.getElementById('tiersList');
+    listEl.innerHTML = '';
+    tiers.forEach(t=>{
+      const totalPlayers = t.rooms.reduce((sum,r)=>sum+r.playerCount, 0);
+      const openRooms = t.rooms.filter(r=>r.phase==='lobby' && r.playerCount < r.maxPlayers).length;
+      const row = document.createElement('div');
+      row.className = 'tier-card';
+      row.innerHTML = `
+        <div class="tier-icon">${t.icon}</div>
+        <div class="tier-info">
+          <div class="tier-name">${t.name}</div>
+          <div class="tier-meta">최소 베팅 ${t.minBet.toLocaleString()} 칩 · 방 ${t.rooms.length}개 · 총 ${totalPlayers}명 접속중</div>
+        </div>
+        <div class="tier-status ${openRooms>0 ? 'status-lobby' : 'status-playing'}">${openRooms>0 ? '입장 가능' : '전체 진행중'}</div>
+      `;
+      row.onclick = ()=> openTierDetail(t.id);
+      listEl.appendChild(row);
+    });
+  }
+
+  if(!document.getElementById('screen-tier-detail').classList.contains('hidden') && openTierId){
+    renderTierDetail(openTierId);
+  }
+  if(!document.getElementById('screen-home').classList.contains('hidden')) renderHome();
+});
+
+function openTierDetail(tierId){
+  openTierId = tierId;
+  document.getElementById('screen-lobby').classList.add('hidden');
+  document.getElementById('screen-tier-detail').classList.remove('hidden');
+  renderTierDetail(tierId);
+}
+document.getElementById('tierBackBtn').onclick = ()=>{
+  openTierId = null;
+  document.getElementById('screen-tier-detail').classList.add('hidden');
+  document.getElementById('screen-lobby').classList.remove('hidden');
+  socket.emit('getLobby');
+};
+
+function renderTierDetail(tierId){
+  const t = (currentTierData||[]).find(x=>x.id===tierId);
+  if(!t) return;
+  document.getElementById('tierDetailTitle').textContent = `${t.icon} ${t.name}`;
+  document.getElementById('tierDetailSub').textContent = `최소 베팅 ${t.minBet.toLocaleString()} 칩`;
+
+  const listEl = document.getElementById('roomsList');
   listEl.innerHTML = '';
-  tiers.forEach(t=>{
-    const full = t.playerCount >= t.maxPlayers;
-    const playing = t.phase !== 'lobby';
-    const row = document.createElement('div');
-    row.className = 'tier-card' + (full ? ' locked' : '');
-    row.innerHTML = `
-      <div class="tier-icon">${t.icon}</div>
-      <div class="tier-info">
-        <div class="tier-name">${t.name}</div>
-        <div class="tier-meta">최소 베팅 ${t.minBet.toLocaleString()} 칩 · ${t.playerCount}/${t.maxPlayers}명</div>
-      </div>
+  t.rooms.forEach(r=>{
+    const full = r.playerCount >= r.maxPlayers;
+    const playing = r.phase !== 'lobby';
+    const disabled = full || playing;
+    const card = document.createElement('div');
+    card.className = 'room-card' + (disabled ? ' full' : '');
+    card.innerHTML = `
+      <div class="room-card-icon">🃏</div>
+      <div class="room-card-name">${t.name} #${r.roomNumber}</div>
+      <div class="room-card-count">${r.playerCount}/${r.maxPlayers}명</div>
       <div class="tier-status ${playing ? 'status-playing' : 'status-lobby'}">${playing ? '진행중' : '대기중'}</div>
     `;
-    if(!full){
-      row.onclick = ()=>{
-        socket.emit('joinTable', { tableId: t.id, name: myName });
-        switchTab('game');
-      };
-    }
-    listEl.appendChild(row);
+    if(!disabled) card.onclick = ()=> enterRoom(r.id);
+    listEl.appendChild(card);
   });
-});
+}
+
+document.getElementById('quickMatchBtn').onclick = ()=>{
+  if(!openTierId) return;
+  roundHistory = []; lastTablePhase = null; lastTableRound = null;
+  renderHistory();
+  socket.emit('quickMatch', { tierId: openTierId, name: myName });
+  switchTab('game');
+};
+
+function enterRoom(roomId){
+  roundHistory = []; lastTablePhase = null; lastTableRound = null;
+  renderHistory();
+  socket.emit('joinRoom', { roomId, name: myName });
+  switchTab('game');
+}
+
+
+function startPhaseCountdown(t, countdownEl, suffix){
+  if(!t.phaseTimerEndsAt) return;
+  countdownEl.classList.remove('hidden');
+  if(countdownInterval) clearInterval(countdownInterval);
+  const tick = ()=>{
+    const secs = Math.max(0, Math.ceil((t.phaseTimerEndsAt - Date.now())/1000));
+    countdownEl.textContent = `${secs}${suffix}`;
+    if(secs<=0) clearInterval(countdownInterval);
+  };
+  tick();
+  countdownInterval = setInterval(tick, 250);
+}
+
+function renderHistory(){
+  const el = document.getElementById('historyStrip');
+  if(!el) return;
+  el.innerHTML = roundHistory.map(r=>{
+    const label = r==='win' ? 'W' : (r==='lose' ? 'L' : 'P');
+    return `<div class="history-dot ${r}">${label}</div>`;
+  }).join('');
+}
 
 function bigCardEl(card, delay){
   const div = document.createElement('div');
@@ -469,12 +904,33 @@ function bigCardEl(card, delay){
   return div;
 }
 
-socket.on('tableUpdate', (t)=>{
+let lastTablePhase = null;
+let lastTableRound = null;
+socket.on('roomUpdate', (t)=>{
   if(document.getElementById('screen-game').classList.contains('hidden')) return;
   document.getElementById('roundNum').textContent = t.round;
 
-  const me = t.players.find(p=>p.id===myId);
-  const others = t.players.filter(p=>p.id!==myId);
+  if(t.round !== lastTableRound){ lastTableRound = t.round; lastTablePhase = null; }
+  if(t.phase !== lastTablePhase){
+    if(t.phase === 'turns' && lastTablePhase === 'betting') Sound.deal();
+    if(t.phase === 'resolved'){
+      const me0 = t.players.find(p=>p.id===myClientId);
+      if(me0 && me0.result){
+        if(me0.result.startsWith('+')){
+          const isBig = me0.handName && (me0.handName.includes('Tong') || me0.handName.includes('Straight') || me0.handName.includes('Sian') || me0.handName.includes('Pok'));
+          isBig ? Sound.pok() : Sound.win();
+          roundHistory.unshift('win');
+        } else if(me0.result.startsWith('-')){ Sound.lose(); roundHistory.unshift('lose'); }
+        else { roundHistory.unshift('push'); }
+        roundHistory = roundHistory.slice(0,8);
+        renderHistory();
+      }
+    }
+    lastTablePhase = t.phase;
+  }
+
+  const me = t.players.find(p=>p.id===myClientId);
+  const others = t.players.filter(p=>p.id!==myClientId);
   const layout = SEAT_LAYOUTS[Math.min(others.length,5)] || [];
 
   const felt = document.getElementById('tableFelt');
@@ -541,14 +997,16 @@ socket.on('tableUpdate', (t)=>{
     } else {
       msg.textContent = '플레이어들이 베팅 중입니다 (뱅커는 베팅하지 않음)';
     }
+    startPhaseCountdown(t, countdownEl, '초 후 자동 베팅');
   } else if(t.phase === 'turns'){
-    if(t.turnPlayerId === myId){
+    if(t.turnPlayerId === myClientId){
       msg.textContent = '당신의 차례입니다 — 3번째 카드를 받으시겠습니까?';
       hitBtn.classList.remove('hidden'); stayBtn.classList.remove('hidden');
     } else {
       const turnP = t.players.find(p=>p.id===t.turnPlayerId);
       msg.textContent = turnP ? `${turnP.name}님의 차례...` : '카드 정산 중...';
     }
+    startPhaseCountdown(t, countdownEl, '초 후 자동 진행');
   } else if(t.phase === 'resolved'){
     msg.textContent = me ? `${me.handName || ''} — ${me.result || ''}` : '라운드 종료';
     showResults(t);
@@ -560,14 +1018,14 @@ function showResults(t){
   resultsList.innerHTML = '';
   t.players.forEach(p=>{
     const row = document.createElement('div');
-    row.className = 'result-row' + (p.id===myId ? ' me' : '');
+    row.className = 'result-row' + (p.id===myClientId ? ' me' : '');
     const cardsHtml = (p.hand||[]).map(c=> c ? `<div class="result-mini-card${(c.s==='♥'||c.s==='♦')?' red':''}">${c.r}</div>` : '').join('');
     const score = (p.hand && p.hand.every(c=>c!==null)) ? handScore(p.hand) : '-';
     const deltaCls = (p.result||'').startsWith('+') ? 'pos' : ((p.result||'').startsWith('-') ? 'neg' : '');
     const deltaTxt = p.result === 'push' ? 'Push' : (p.result || '0');
     row.innerHTML = `
       <div class="result-avatar">${p.isBanker?'👑':'🧑'}</div>
-      <div class="result-name">${p.name}${p.id===myId?' (나)':''}</div>
+      <div class="result-name">${p.name}${p.id===myClientId?' (나)':''}</div>
       <div class="result-cards">${cardsHtml}</div>
       <div class="result-points">${score} Points</div>
       <div class="result-coin ${deltaCls}">${deltaTxt}</div>
