@@ -3,93 +3,182 @@
 <head>
 <meta charset="UTF-8">
 <title>ป๊อกเด้ง Pokdeng Online</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+Thai:wght@400;600;800&family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Noto+Sans+Thai:wght@400;600;800&family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="/socket.io/socket.io.js"></script>
 <style>
   :root{
-    --felt-deep:#052018; --felt-mid:#0a3a2a; --felt-hi:#16624a;
-    --rail-dark:#1c0f08; --rail-hi:#3d2414;
-    --gold:#c79a3d; --gold-bright:#f3d987; --gold-dim:#6b4e12;
-    --ivory:#faf5e8; --ink:#231a12; --red-suit:#b0223a; --glow:#31e6a6;
+    --wood-1:#a45a2a; --wood-2:#7a3d18; --wood-3:#4a220c;
+    --felt-1:#d7cf9a; --felt-2:#c3b877; --felt-edge:#8f8450;
+    --gold:#e8b23d; --gold-bright:#ffd873; --gold-dim:#8a5f13;
+    --purple-1:#4a3a70; --purple-2:#241a3a;
+    --dia:#4fc3f7; --dia-dim:#1c6b8a;
+    --ink:#2a1f14; --red-suit:#c0272f; --win-red:#e0392f;
+    --ivory:#fbf6e6; --glow:#31e6a6;
+    --bg-app:#0c1c16; --nav-bg:#160f0a;
   }
   *{box-sizing:border-box;}
-  html{background:#000;}
+  html,body{ height:100%; }
   body{
-    margin:0; min-height:100vh;
-    background: radial-gradient(circle at 50% 30%, var(--felt-hi), var(--felt-mid) 45%, var(--felt-deep) 100%);
-    font-family:'Noto Sans KR','Noto Sans Thai',sans-serif; color:var(--ivory);
-    display:flex; flex-direction:column; align-items:center; padding:18px 10px 70px;
+    margin:0;
+    background: radial-gradient(circle at 50% 15%, #2a4a3a, var(--bg-app) 70%);
+    font-family:'Noto Sans KR','Noto Sans Thai',sans-serif;
+    color:var(--ivory);
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh;
   }
-  .frame{
-    width:100%; max-width:480px; border-radius:26px; padding:20px 16px 24px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.3) 35%), linear-gradient(135deg, var(--rail-hi), var(--rail-dark) 60%);
-    box-shadow:0 24px 60px rgba(0,0,0,0.7), inset 0 0 0 2px rgba(199,154,61,0.35), inset 0 2px 0 rgba(255,255,255,0.08);
-    position:relative;
+  .app{ width:100%; max-width:440px; display:flex; flex-direction:column; min-height:100vh; position:relative; }
+  .hidden{ display:none !important; }
+
+  /* ===== 상단 상태바 (재화 표시) ===== */
+  .statusbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 14px; gap:8px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.25));
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    position:sticky; top:0; z-index:20;
   }
-  .felt-inset{ position:absolute; inset:10px; border-radius:18px; background:radial-gradient(circle at 50% 20%, var(--felt-hi), var(--felt-mid) 55%, var(--felt-deep) 100%); box-shadow: inset 0 0 40px rgba(0,0,0,0.55); z-index:0; }
-  .content{ position:relative; z-index:1; }
-
-  h1{ font-family:'Bebas Neue', sans-serif; letter-spacing:7px; font-size:28px; text-align:center; margin:4px 0 0;
-    background:linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, var(--gold-dim)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .sub{ text-align:center; font-size:11px; color:var(--gold); opacity:0.65; margin-bottom:18px; letter-spacing:1.5px; text-transform:uppercase;}
-
-  input{ width:100%; padding:13px 15px; border-radius:12px; border:1px solid rgba(199,154,61,0.4); background:rgba(0,0,0,0.3); color:var(--ivory); font-size:15px; margin-bottom:12px; }
-
-  .table-card{
-    display:flex; align-items:center; gap:12px; padding:13px 15px; border-radius:16px;
-    background:linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.14)); border:1px solid rgba(255,255,255,0.07);
-    margin-bottom:10px; cursor:pointer; transition:transform .12s, box-shadow .12s;
+  .brand{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:15px; letter-spacing:1px;
+    background:linear-gradient(180deg, var(--gold-bright), var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .currency-group{ display:flex; gap:6px; }
+  .currency-pill{
+    display:flex; align-items:center; gap:5px;
+    background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.12); border-radius:20px;
+    padding:5px 10px 5px 6px; font-weight:800; font-size:12.5px;
   }
-  .table-card:hover{ transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,0.35); }
-  .table-card.full{ opacity:0.45; cursor:not-allowed; }
-  .table-icon{ width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px;
-    background:radial-gradient(circle at 35% 30%, #2f5646, #142720); border:1px solid rgba(199,154,61,0.5); flex-shrink:0; }
-  .table-info{ flex:1; }
-  .table-name{ font-weight:700; font-size:14.5px; }
-  .table-meta{ font-size:11.5px; opacity:0.6; margin-top:2px; }
-  .table-status{ font-size:11px; padding:4px 10px; border-radius:20px; font-weight:700; }
-  .status-lobby{ background:rgba(199,154,61,0.15); color:var(--gold-bright); border:1px solid rgba(199,154,61,0.4); }
-  .status-playing{ background:rgba(49,230,166,0.12); color:var(--glow); border:1px solid rgba(49,230,166,0.4); }
+  .currency-pill.chip{ color:var(--gold-bright); }
+  .currency-pill.dia{ color:var(--dia); }
+  .cur-icon{ width:16px; height:16px; border-radius:50%; flex-shrink:0; }
+  .cur-icon.chip{ background:radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 70%, var(--gold-dim)); }
+  .cur-icon.dia{ background:radial-gradient(circle at 35% 30%, #bdf0ff, var(--dia) 70%, var(--dia-dim)); border-radius:3px; transform:rotate(45deg); }
+  .add-btn{
+    width:20px; height:20px; border-radius:50%; background:var(--gold-bright); color:#2a1c00;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; cursor:pointer; flex-shrink:0;
+  }
 
-  .row{ display:flex; gap:10px; }
+  /* ===== 본문 영역 ===== */
+  .screen{ flex:1; padding:14px 14px 90px; overflow-y:auto; }
+
+  h2.page-title{ font-family:'Baloo 2',sans-serif; font-size:19px; margin:2px 0 4px; color:var(--gold-bright); }
+  .page-sub{ font-size:11.5px; opacity:0.6; margin-bottom:16px; }
+
+  input{ width:100%; padding:13px 15px; border-radius:12px; border:1px solid var(--gold-dim); background:rgba(0,0,0,0.3); color:var(--ivory); font-size:15px; margin-bottom:12px; }
   button.btn{
-    font-weight:700; font-size:14px; padding:13px 22px; border-radius:30px; border:none; cursor:pointer;
+    font-family:'Noto Sans KR',sans-serif; font-weight:700; font-size:14px;
+    padding:13px 24px; border-radius:30px; border:none; cursor:pointer;
     background:linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, var(--gold-dim)); color:#2a1c00;
-    box-shadow:0 5px 0 var(--gold-dim), 0 8px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.6); flex:1;
+    box-shadow:0 5px 0 var(--gold-dim), 0 8px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.6);
+    width:100%;
   }
-  button.btn.secondary{ background:linear-gradient(180deg,#2b4d3d,#12281e); color:var(--ivory); box-shadow:0 5px 0 #0a1a13; }
+  button.btn.secondary{ background:linear-gradient(180deg,#2b4d3d,#12281e); color:var(--ivory); box-shadow:0 5px 0 #0a1a13; width:auto; flex:1; }
+  button.btn.small{ padding:8px 14px; font-size:12px; width:auto; box-shadow:0 3px 0 var(--gold-dim); }
   button.btn:active{ transform:translateY(3px); box-shadow:none; }
   button.btn:disabled{ opacity:0.35; cursor:not-allowed; }
+  .row{ display:flex; gap:10px; }
 
-  .players-list{ margin:14px 0; }
-  .player-row{
-    display:flex; align-items:center; gap:10px; padding:11px 13px; border-radius:14px;
-    background:linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.14)); margin-bottom:8px; border:1px solid rgba(255,255,255,0.06);
-    transition: box-shadow .25s;
+  /* ===== 로비: 티어 카드 ===== */
+  .tier-card{
+    display:flex; align-items:center; gap:12px; padding:14px 15px; border-radius:16px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.14)); border:1px solid rgba(255,255,255,0.07);
+    margin-bottom:10px; cursor:pointer; transition:transform .12s;
   }
-  .player-row.active-turn{ box-shadow:0 0 0 2px var(--glow), 0 0 16px rgba(49,230,166,0.4); }
-  .player-row .tag{ font-size:10.5px; background:rgba(199,154,61,0.14); border:1px solid rgba(199,154,61,0.4); padding:3px 10px; border-radius:20px; color:var(--gold-bright); font-weight:600; }
-  .player-row .bal{ margin-left:auto; font-weight:700; color:var(--gold-bright); font-size:13px; }
-  .avatar-sm{ width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px;
-    background:radial-gradient(circle at 35% 30%, #2f5646, #142720); border:1px solid rgba(199,154,61,0.5); flex-shrink:0; }
+  .tier-card:hover{ transform:translateY(-2px); }
+  .tier-card.locked{ opacity:0.4; cursor:not-allowed; }
+  .tier-icon{ width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:21px;
+    background:linear-gradient(160deg, var(--wood-1), var(--wood-3)); border:1px solid var(--gold-dim); flex-shrink:0; }
+  .tier-info{ flex:1; }
+  .tier-name{ font-weight:700; font-size:14.5px; }
+  .tier-meta{ font-size:11px; opacity:0.6; margin-top:2px; }
+  .tier-status{ font-size:10.5px; padding:4px 9px; border-radius:20px; font-weight:700; white-space:nowrap; }
+  .status-lobby{ background:rgba(232,178,61,0.15); color:var(--gold-bright); border:1px solid var(--gold-dim); }
+  .status-playing{ background:rgba(49,230,166,0.12); color:var(--glow); border:1px solid rgba(49,230,166,0.4); }
+  .note{ font-size:11px; opacity:0.5; text-align:center; margin-top:14px; line-height:1.7; }
 
-  .cards-row{ display:flex; gap:9px; min-height:78px; align-items:center; flex-wrap:wrap; margin:6px 0 4px; }
-  .card{ width:52px; height:74px; border-radius:9px; background:linear-gradient(160deg,#fff, var(--ivory) 65%);
-    box-shadow:0 6px 14px rgba(0,0,0,0.45); opacity:0; animation:deal .4s ease forwards; position:relative; }
-  .card-corner{ position:absolute; top:5px; left:5px; text-align:center; line-height:1; font-weight:800; color:var(--ink); font-size:11.5px; }
-  .card-corner .s{ font-size:10.5px; display:block; margin-top:1px; }
+  /* ===== 마켓 ===== */
+  .market-section-title{ font-size:13px; font-weight:700; color:var(--gold-bright); margin:18px 0 10px; display:flex; align-items:center; gap:6px; }
+  .package-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .package-card{
+    background:linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.14)); border:1px solid rgba(255,255,255,0.08);
+    border-radius:16px; padding:14px 10px; text-align:center; position:relative;
+  }
+  .package-bonus{ position:absolute; top:-8px; right:8px; background:var(--win-red); color:#fff; font-size:9px; font-weight:800; padding:2px 7px; border-radius:10px; }
+  .package-icon{ font-size:26px; margin-bottom:4px; }
+  .package-amount{ font-weight:800; font-size:16px; color:var(--dia); }
+  .package-price{ font-size:11px; opacity:0.65; margin:4px 0 10px; }
+
+  .exchange-row{
+    display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:14px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.14)); border:1px solid rgba(255,255,255,0.07);
+    margin-bottom:9px;
+  }
+  .exchange-formula{ flex:1; font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .exchange-formula .dia-amt{ color:var(--dia); }
+  .exchange-formula .chip-amt{ color:var(--gold-bright); }
+  .arrow{ opacity:0.5; }
+
+  /* ===== 게임(테이블) 화면 — 이전과 동일 구조 유지 ===== */
+  .table-topbar{ display:flex; justify-content:space-between; align-items:center; padding:2px 2px 12px; }
+  .back-link{ font-size:12px; opacity:0.65; cursor:pointer; }
+  .countdown{ font-size:11.5px; color:var(--gold-bright); opacity:0.85; }
+
+  .table-frame{
+    position:relative; background: linear-gradient(160deg, var(--wood-1), var(--wood-2) 55%, var(--wood-3));
+    border-radius:50% / 34%; padding:22px 14px; box-shadow:0 18px 40px rgba(0,0,0,0.55), inset 0 0 0 2px rgba(255,214,120,0.25);
+  }
+  .table-felt{
+    position:relative; border-radius:50% / 40%;
+    background: repeating-linear-gradient(115deg, rgba(255,255,255,0.03) 0 3px, transparent 3px 7px),
+      radial-gradient(ellipse at 50% 30%, var(--felt-1), var(--felt-2) 70%);
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.35), inset 0 0 0 3px var(--felt-edge);
+    min-height:230px; padding:14px 6px;
+  }
+  .round-pill{
+    position:absolute; top:10px; left:50%; transform:translateX(-50%);
+    background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.15);
+    color:var(--ivory); font-size:10.5px; padding:4px 12px; border-radius:20px; opacity:0.85; z-index:3;
+  }
+  .seat{ position:absolute; display:flex; flex-direction:column; align-items:center; transform:translate(-50%,-50%); width:64px; }
+  .avatar-ring{
+    width:44px; height:44px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #4a6a56, #1c2e26);
+    border:3px solid var(--gold-dim); display:flex; align-items:center; justify-content:center; font-size:20px;
+    position:relative; transition: box-shadow .25s, border-color .25s;
+  }
+  .avatar-ring.active{ border-color:var(--gold-bright); box-shadow:0 0 0 4px rgba(255,216,115,0.35), 0 0 14px rgba(255,216,115,0.5); }
+  .win-ribbon{
+    position:absolute; top:-13px; left:50%; transform:translateX(-50%) scale(0);
+    background:linear-gradient(180deg, #ff5b4d, var(--win-red)); color:#fff;
+    font-family:'Baloo 2', sans-serif; font-weight:800; font-size:10px; padding:2px 9px; border-radius:5px;
+    clip-path: polygon(6% 0%, 94% 0%, 100% 50%, 94% 100%, 6% 100%, 0% 50%); z-index:5;
+  }
+  .win-ribbon.show{ animation: ribbonPop .5s cubic-bezier(.3,1.6,.4,1) forwards; }
+  @keyframes ribbonPop{ from{transform:translateX(-50%) scale(0) rotate(-8deg);} to{transform:translateX(-50%) scale(1) rotate(-4deg);} }
+  .mini-cards{ display:flex; gap:3px; margin-top:5px; }
+  .mini-card{ width:20px; height:28px; border-radius:3px; background:linear-gradient(160deg,#fff,var(--ivory) 65%);
+    display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:800; color:var(--ink); box-shadow:0 2px 5px rgba(0,0,0,0.35); }
+  .mini-card.red{ color:var(--red-suit); }
+  .mini-card.back{ background:repeating-linear-gradient(45deg,#7a3d1c 0 4px,#5c2c12 4px 8px); border:1.5px solid var(--gold); }
+  .points-badge{ margin-top:5px; background:linear-gradient(180deg,var(--purple-1),var(--purple-2)); border:1px solid rgba(255,255,255,0.15);
+    color:var(--gold-bright); font-weight:800; font-size:9.5px; padding:3px 9px; border-radius:20px; white-space:nowrap; }
+  .name-tag{ font-size:9.5px; opacity:0.8; margin-top:3px; max-width:60px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+  .my-seat{ margin-top:16px; text-align:center; position:relative; }
+  .my-cards{ display:flex; gap:10px; justify-content:center; min-height:88px; align-items:center; }
+  .card{ width:58px; height:82px; border-radius:9px; background:linear-gradient(160deg,#fff, var(--ivory) 65%);
+    box-shadow:0 8px 16px rgba(0,0,0,0.5); position:relative; opacity:0; animation:deal .4s cubic-bezier(.16,.9,.28,1.1) forwards; }
+  .card-corner{ position:absolute; top:5px; left:5px; text-align:center; line-height:1; font-weight:800; color:var(--ink); font-size:12.5px; }
+  .card-corner .s{ font-size:11px; display:block; margin-top:1px; }
   .card.red .card-corner{ color:var(--red-suit); }
-  .card-center{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:26px; color:var(--ink); opacity:0.9; }
+  .card-center{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:28px; color:var(--ink); opacity:0.9; }
   .card.red .card-center{ color:var(--red-suit); }
-  .card.back{ background:repeating-linear-gradient(45deg, #7a3d1c 0 6px, #5c2c12 6px 12px); border:2px solid var(--gold); }
-  .card.back::after{ content:"◆"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--gold-bright); font-size:17px; opacity:0.85; }
-  @keyframes deal{ from{opacity:0; transform:translateY(-18px) scale(0.8);} to{opacity:1; transform:translateY(0) scale(1);} }
-
-  .center-msg{ text-align:center; font-weight:700; font-size:14.5px; margin:12px 0; min-height:22px; }
-  .bet-row{ display:flex; justify-content:center; gap:12px; margin:10px 0 16px; flex-wrap:wrap; }
-  .chip-stack{ position:relative; width:54px; height:54px; cursor:pointer; transition:transform .15s; }
+  .card.back{ background:repeating-linear-gradient(45deg,#7a3d1c 0 6px,#5c2c12 6px 12px); border:2px solid var(--gold); }
+  @keyframes deal{ from{opacity:0; transform:translateY(-22px) scale(0.75);} to{opacity:1; transform:translateY(0) scale(1);} }
+  .my-points{ display:inline-block; margin-top:8px; background:linear-gradient(180deg,var(--purple-1),var(--purple-2));
+    border:1px solid rgba(255,255,255,0.15); color:var(--gold-bright); font-weight:800; font-size:13px; padding:5px 16px; border-radius:20px; }
+  .my-name{ margin-top:6px; font-size:12px; opacity:0.8; }
+  .center-msg{ text-align:center; min-height:26px; font-weight:700; font-size:14px; margin:14px 0 8px; }
+  .bet-row{ display:flex; justify-content:center; gap:12px; margin:6px 0 16px; flex-wrap:wrap; }
+  .chip-stack{ position:relative; width:52px; height:52px; cursor:pointer; transition:transform .15s; }
   .chip-stack:hover{ transform:translateY(-3px); }
   .chip{ position:absolute; inset:0; border-radius:50%; display:flex; align-items:center; justify-content:center;
     font-weight:800; font-size:12px; color:#1a1a1a; border:2px solid rgba(255,255,255,0.55); outline:3px dotted rgba(255,255,255,0.35); outline-offset:-6px; }
@@ -97,50 +186,141 @@
   .c10 .chip{ background:radial-gradient(circle at 35% 30%, #fdfdfd, #cfcfcf);} .c10 .chip-edge{ background:#9c9c9c; }
   .c50 .chip{ background:radial-gradient(circle at 35% 30%, #f0b876, #c9791f); color:#3a2200;} .c50 .chip-edge{ background:#8a4f14; }
   .c100 .chip{ background:radial-gradient(circle at 35% 30%, #7fb8f2, #2f6fb0); color:#fff;} .c100 .chip-edge{ background:#1f4c78; }
+  .actions{ display:flex; gap:11px; justify-content:center; flex-wrap:wrap; }
+  .note-small{ font-size:10.5px; opacity:0.5; text-align:center; margin-top:14px; line-height:1.7; }
 
-  .hidden{ display:none !important; }
-  .note{ font-size:11px; opacity:0.55; text-align:center; margin-top:14px; line-height:1.7; }
-  .countdown{ text-align:center; font-size:12px; color:var(--gold-bright); opacity:0.8; margin-bottom:6px; }
-  .back-link{ font-size:12px; opacity:0.6; cursor:pointer; margin-bottom:10px; display:inline-block; }
+  .results-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.65); display:flex; align-items:center; justify-content:center; z-index:60;
+    opacity:0; pointer-events:none; transition:opacity .25s; }
+  .results-overlay.show{ opacity:1; pointer-events:auto; }
+  .results-panel{ width:90%; max-width:380px; background:linear-gradient(180deg, #6a3320, #3a1810 60%); border-radius:22px; padding:22px 16px 18px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.6); transform:scale(0.85); transition:transform .25s; border:1px solid rgba(255,214,120,0.3); max-height:80vh; overflow-y:auto; }
+  .results-overlay.show .results-panel{ transform:scale(1); }
+  .results-title{ text-align:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:24px;
+    background:linear-gradient(180deg, var(--gold-bright), var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent; letter-spacing:2px; margin-bottom:14px; }
+  .result-row{ display:flex; align-items:center; gap:8px; padding:9px 10px; border-radius:12px; background:rgba(0,0,0,0.25); margin-bottom:8px; border:1px solid rgba(255,255,255,0.08); }
+  .result-row.me{ border-color:var(--gold-bright); box-shadow:0 0 0 1px var(--gold-bright); }
+  .result-avatar{ width:28px; height:28px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#4a6a56,#1c2e26); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+  .result-name{ font-size:12px; font-weight:700; width:48px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .result-cards{ display:flex; gap:3px; }
+  .result-mini-card{ width:20px; height:28px; border-radius:3px; background:linear-gradient(160deg,#fff,var(--ivory) 65%); display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:800; color:var(--ink); }
+  .result-mini-card.red{ color:var(--red-suit); }
+  .result-points{ margin-left:auto; font-size:10px; background:rgba(255,255,255,0.08); padding:3px 8px; border-radius:14px; white-space:nowrap; }
+  .result-coin{ font-weight:800; font-size:12.5px; min-width:52px; text-align:right; }
+  .result-coin.pos{ color:#7be3a5; } .result-coin.neg{ color:#ff9b9b; }
+
+  /* ===== 하단 탭바 (모바일 앱 스타일) ===== */
+  .tabbar{
+    position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+    width:100%; max-width:440px;
+    display:flex; background:var(--nav-bg); border-top:1px solid rgba(255,255,255,0.08);
+    padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+    z-index:30;
+  }
+  .tab-btn{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;
+    background:none; border:none; color:rgba(255,255,255,0.45); font-size:10.5px; font-weight:700; cursor:pointer; padding:6px 0;
+  }
+  .tab-btn .tab-icon{ font-size:19px; }
+  .tab-btn.active{ color:var(--gold-bright); }
+
+  .toast{
+    position:fixed; top:70px; left:50%; transform:translateX(-50%) translateY(-10px); opacity:0;
+    background:linear-gradient(180deg, #2b4d3d, #12281e); border:1px solid var(--glow); color:var(--glow);
+    padding:10px 18px; border-radius:20px; font-size:12.5px; font-weight:700; z-index:80; transition:all .25s;
+    pointer-events:none;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
-<div class="frame">
-  <div class="felt-inset"></div>
-  <div class="content">
-    <h1>POKDENG ONLINE</h1>
-    <div class="sub">ป๊อกเด้ง · 실시간 멀티플레이어</div>
+<div class="app">
 
-    <!-- 화면 1: 닉네임 -->
-    <div id="screen-name">
-      <input id="nameInput" placeholder="닉네임 입력" maxlength="12">
-      <button class="btn" id="nameConfirmBtn">입장하기</button>
+  <div class="statusbar" id="statusbar" style="display:none;">
+    <div class="brand">POKDENG</div>
+    <div class="currency-group">
+      <div class="currency-pill chip"><span class="cur-icon chip"></span><span id="chipBalance">0</span></div>
+      <div class="currency-pill dia"><span class="cur-icon dia"></span><span id="diaBalance">0</span></div>
+      <div class="add-btn" id="addDiaBtn">+</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- 화면 0: 닉네임 -->
+  <div class="screen" id="screen-name">
+    <h2 class="page-title" style="text-align:center; font-size:24px; margin-top:40px;">ป๊อกเด้ง POKDENG</h2>
+    <div class="page-sub" style="text-align:center;">실시간 멀티플레이어 · 소셜 카드게임</div>
+    <input id="nameInput" placeholder="닉네임 입력" maxlength="12">
+    <button class="btn" id="nameConfirmBtn">시작하기</button>
+  </div>
+
+  <!-- 화면 1: 로비 -->
+  <div class="screen hidden" id="screen-lobby">
+    <h2 class="page-title">로비</h2>
+    <div class="page-sub">배팅금액에 맞는 테이블을 선택하세요</div>
+    <div id="tiersList"></div>
+    <div class="note">2명 이상 모이면 잠시 후 자동으로 라운드가 시작됩니다.</div>
+  </div>
+
+  <!-- 화면 2: 마켓 -->
+  <div class="screen hidden" id="screen-market">
+    <h2 class="page-title">마켓</h2>
+    <div class="page-sub">다이아 구매 및 칩 교환</div>
+
+    <div class="market-section-title">💎 다이아 구매 (App Store / Google Play)</div>
+    <div class="package-grid" id="diaPackages"></div>
+
+    <div class="market-section-title">🪙 다이아 → 칩 교환</div>
+    <div id="exchangeList"></div>
+
+    <div class="note">다이아 구매는 실제 앱스토어/구글플레이 결제로 진행됩니다 (지금은 테스트용 화면). 칩은 게임 베팅 전용이며 현금으로 교환/환전할 수 없습니다.</div>
+  </div>
+
+  <!-- 화면 3: 게임(테이블) -->
+  <div class="screen hidden" id="screen-game" style="padding-top:8px;">
+    <div class="table-topbar">
+      <span class="back-link" id="leaveBtn">← 로비로</span>
+      <span class="countdown hidden" id="countdownMsg"></span>
     </div>
 
-    <!-- 화면 2: 공개 테이블 목록 -->
-    <div id="screen-lobby" class="hidden">
-      <div id="tablesList"></div>
-      <div class="note">테이블을 선택하면 바로 입장돼요. 2명 이상 모이면 잠시 후 자동으로 라운드가 시작됩니다.</div>
-    </div>
-
-    <!-- 화면 3: 게임 -->
-    <div id="screen-game" class="hidden">
-      <span class="back-link" id="leaveBtn">← 테이블 목록으로</span>
-      <div class="countdown hidden" id="countdownMsg"></div>
-      <div class="players-list" id="playersList"></div>
-      <div class="cards-row" id="myCards"></div>
-      <div class="center-msg" id="gameMsg">대기 중...</div>
-      <div class="bet-row hidden" id="betRow">
-        <div class="chip-stack c10" data-v="10"><div class="chip-edge"></div><div class="chip">10</div></div>
-        <div class="chip-stack c50" data-v="50"><div class="chip-edge"></div><div class="chip">50</div></div>
-        <div class="chip-stack c100" data-v="100"><div class="chip-edge"></div><div class="chip">100</div></div>
+    <div class="table-frame">
+      <div class="table-felt" id="tableFelt">
+        <div class="round-pill"><span id="roundNum">0</span> 라운드</div>
       </div>
-      <div class="row" id="actionRow">
-        <button class="btn hidden" id="hitBtn">3번째 카드</button>
-        <button class="btn secondary hidden" id="stayBtn">스테이</button>
-      </div>
-      <div class="note">뱅커(딜러)는 매 라운드마다 다음 사람으로 자동 교체됩니다.</div>
     </div>
+
+    <div class="my-seat">
+      <div class="win-ribbon" id="myWin" style="top:-8px;">WIN</div>
+      <div class="my-cards" id="myCards"></div>
+      <div class="my-points" id="myPointsBadge">- Points</div>
+      <div class="my-name" id="myNameTag">나</div>
+    </div>
+
+    <div class="center-msg" id="gameMsg">대기 중...</div>
+
+    <div class="bet-row hidden" id="betRow">
+      <div class="chip-stack c10" data-v="10"><div class="chip-edge"></div><div class="chip">10</div></div>
+      <div class="chip-stack c50" data-v="50"><div class="chip-edge"></div><div class="chip">50</div></div>
+      <div class="chip-stack c100" data-v="100"><div class="chip-edge"></div><div class="chip">100</div></div>
+    </div>
+
+    <div class="actions" id="actionRow">
+      <button class="btn hidden" id="hitBtn">3번째 카드</button>
+      <button class="btn secondary hidden" id="stayBtn">스테이</button>
+    </div>
+    <div class="note-small">뱅커(딜러)는 매 라운드마다 다음 사람으로 자동 교체됩니다.</div>
+  </div>
+
+  <div class="tabbar hidden" id="tabbar">
+    <button class="tab-btn active" data-tab="lobby"><span class="tab-icon">🏠</span>로비</button>
+    <button class="tab-btn" data-tab="market"><span class="tab-icon">💎</span>마켓</button>
+  </div>
+</div>
+
+<div class="results-overlay" id="resultsOverlay">
+  <div class="results-panel">
+    <div class="results-title">RESULTS</div>
+    <div id="resultsList"></div>
   </div>
 </div>
 
@@ -149,114 +329,205 @@ const socket = io();
 let myId = null;
 let myName = '';
 let currentBet = 0;
+let countdownInterval = null;
+let marketData = { diamondPackages: [], exchangeRates: [] };
 
-socket.on('connect', ()=> myId = socket.id);
+function showToast(text){
+  const t = document.getElementById('toast');
+  t.textContent = text;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+function switchTab(name){
+  ['lobby','market','game'].forEach(s=>{
+    document.getElementById('screen-'+s).classList.toggle('hidden', s!==name);
+  });
+  document.querySelectorAll('.tab-btn').forEach(b=> b.classList.toggle('active', b.dataset.tab===name));
+  document.getElementById('tabbar').classList.toggle('hidden', name==='game');
+  if(name==='lobby') socket.emit('getLobby');
+}
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.onclick = ()=> switchTab(btn.dataset.tab);
+});
+document.getElementById('addDiaBtn').onclick = ()=> switchTab('market');
+
+fetch('/api/market').then(r=>r.json()).then(data=>{
+  marketData = data;
+  renderMarket();
+});
 
 document.getElementById('nameConfirmBtn').onclick = ()=>{
   myName = document.getElementById('nameInput').value.trim() || '플레이어';
   document.getElementById('screen-name').classList.add('hidden');
-  document.getElementById('screen-lobby').classList.remove('hidden');
-  socket.emit('getLobby');
+  document.getElementById('statusbar').style.display = 'flex';
+  document.getElementById('tabbar').classList.remove('hidden');
+  switchTab('lobby');
 };
 
 document.getElementById('leaveBtn').onclick = ()=>{
   socket.emit('leaveTable');
-  document.getElementById('screen-game').classList.add('hidden');
-  document.getElementById('screen-lobby').classList.remove('hidden');
-  socket.emit('getLobby');
+  switchTab('lobby');
 };
-
 document.getElementById('hitBtn').onclick = ()=> socket.emit('decision', {action:'hit'});
 document.getElementById('stayBtn').onclick = ()=> socket.emit('decision', {action:'stay'});
 document.querySelectorAll('.chip-stack').forEach(chip=>{
-  chip.onclick = ()=>{
-    currentBet += parseInt(chip.dataset.v);
-    socket.emit('placeBet', { amount: currentBet });
-  };
+  chip.onclick = ()=>{ currentBet += parseInt(chip.dataset.v); socket.emit('placeBet', { amount: currentBet }); };
 });
-socket.on('errorMsg', (msg)=> alert(msg));
 
-socket.on('lobbyUpdate', (tables)=>{
-  const listEl = document.getElementById('tablesList');
+socket.on('connect', ()=> myId = socket.id);
+socket.on('errorMsg', (msg)=> showToast('⚠️ ' + msg));
+socket.on('purchaseSuccess', (p)=>{
+  showToast(p.type==='diamond' ? `💎 다이아 +${p.amount} 획득!` : `🪙 칩 +${p.amount.toLocaleString()} 획득!`);
+});
+
+socket.on('walletUpdate', (w)=>{
+  document.getElementById('chipBalance').textContent = w.chips.toLocaleString();
+  document.getElementById('diaBalance').textContent = w.diamonds.toLocaleString();
+});
+
+function renderMarket(){
+  const pkgEl = document.getElementById('diaPackages');
+  pkgEl.innerHTML = '';
+  marketData.diamondPackages.forEach(p=>{
+    const card = document.createElement('div');
+    card.className = 'package-card';
+    card.innerHTML = `
+      ${p.bonus ? `<div class="package-bonus">${p.bonus}</div>` : ''}
+      <div class="package-icon">💎</div>
+      <div class="package-amount">${p.diamonds.toLocaleString()}</div>
+      <div class="package-price">${p.priceLabel}</div>
+      <button class="btn small" style="width:100%;">구매</button>
+    `;
+    card.querySelector('button').onclick = ()=> socket.emit('purchaseDiamonds', { packageId: p.id });
+    pkgEl.appendChild(card);
+  });
+
+  const exEl = document.getElementById('exchangeList');
+  exEl.innerHTML = '';
+  marketData.exchangeRates.forEach(r=>{
+    const row = document.createElement('div');
+    row.className = 'exchange-row';
+    row.innerHTML = `
+      <div class="exchange-formula">
+        <span class="dia-amt">💎 ${r.diamonds}</span>
+        <span class="arrow">→</span>
+        <span class="chip-amt">🪙 ${r.chips.toLocaleString()}</span>
+      </div>
+      <button class="btn small">교환</button>
+    `;
+    row.querySelector('button').onclick = ()=> socket.emit('exchangeDiamonds', { exchangeId: r.id });
+    exEl.appendChild(row);
+  });
+}
+
+const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+function cardValue(card){ if(card.r==='A') return 1; if(['10','J','Q','K'].includes(card.r)) return 0; return parseInt(card.r); }
+function handScore(hand){ return hand.reduce((a,c)=>a+cardValue(c),0) % 10; }
+
+const SEAT_LAYOUTS = {
+  1: [{l:50,t:18}], 2: [{l:22,t:32},{l:78,t:32}],
+  3: [{l:15,t:48},{l:50,t:14},{l:85,t:48}],
+  4: [{l:12,t:58},{l:32,t:18},{l:68,t:18},{l:88,t:58}],
+  5: [{l:10,t:66},{l:26,t:30},{l:50,t:12},{l:74,t:30},{l:90,t:66}]
+};
+
+socket.on('lobbyUpdate', (tiers)=>{
   if(document.getElementById('screen-lobby').classList.contains('hidden')) return;
+  const listEl = document.getElementById('tiersList');
   listEl.innerHTML = '';
-  tables.forEach(t=>{
+  tiers.forEach(t=>{
     const full = t.playerCount >= t.maxPlayers;
     const playing = t.phase !== 'lobby';
     const row = document.createElement('div');
-    row.className = 'table-card' + (full ? ' full' : '');
+    row.className = 'tier-card' + (full ? ' locked' : '');
     row.innerHTML = `
-      <div class="table-icon">🃏</div>
-      <div class="table-info">
-        <div class="table-name">${t.name}</div>
-        <div class="table-meta">최소 베팅 ${t.minBet} 칩 · ${t.playerCount}/${t.maxPlayers}명</div>
+      <div class="tier-icon">${t.icon}</div>
+      <div class="tier-info">
+        <div class="tier-name">${t.name}</div>
+        <div class="tier-meta">최소 베팅 ${t.minBet.toLocaleString()} 칩 · ${t.playerCount}/${t.maxPlayers}명</div>
       </div>
-      <div class="table-status ${playing ? 'status-playing' : 'status-lobby'}">${playing ? '진행중' : '대기중'}</div>
+      <div class="tier-status ${playing ? 'status-playing' : 'status-lobby'}">${playing ? '진행중' : '대기중'}</div>
     `;
     if(!full){
       row.onclick = ()=>{
         socket.emit('joinTable', { tableId: t.id, name: myName });
-        document.getElementById('screen-lobby').classList.add('hidden');
-        document.getElementById('screen-game').classList.remove('hidden');
+        switchTab('game');
       };
     }
     listEl.appendChild(row);
   });
 });
 
-function cardEl(card){
-  const d = document.createElement('div');
-  if(card===null || card===undefined){ d.className='card back'; return d; }
+function bigCardEl(card, delay){
+  const div = document.createElement('div');
+  if(card===null || card===undefined){ div.className='card back'; div.style.animationDelay=(delay||0)+'ms'; return div; }
   const isRed = card.s==='♥' || card.s==='♦';
-  d.className = 'card' + (isRed?' red':'');
-  d.innerHTML = `<div class="card-corner">${card.r}<span class="s">${card.s}</span></div><div class="card-center">${card.s}</div>`;
-  return d;
+  div.className = 'card' + (isRed?' red':'');
+  div.innerHTML = `<div class="card-corner">${card.r}<span class="s">${card.s}</span></div><div class="card-center">${card.s}</div>`;
+  div.style.animationDelay = (delay||0)+'ms';
+  return div;
 }
 
-let countdownInterval = null;
-
 socket.on('tableUpdate', (t)=>{
-  document.getElementById('screen-lobby').classList.add('hidden');
-  document.getElementById('screen-game').classList.remove('hidden');
+  if(document.getElementById('screen-game').classList.contains('hidden')) return;
+  document.getElementById('roundNum').textContent = t.round;
 
   const me = t.players.find(p=>p.id===myId);
+  const others = t.players.filter(p=>p.id!==myId);
+  const layout = SEAT_LAYOUTS[Math.min(others.length,5)] || [];
 
-  const list = document.getElementById('playersList');
-  list.innerHTML = '';
-  t.players.forEach(p=>{
-    const row = document.createElement('div');
-    row.className = 'player-row' + (t.turnPlayerId===p.id ? ' active-turn' : '');
-    row.innerHTML = `
-      <div class="avatar-sm">${p.isBanker ? '👑' : '🧑'}</div>
-      <span>${p.name}${p.id===myId?' (나)':''}</span>
-      <span class="tag">${p.isBanker ? '뱅커' : (t.phase==='betting' ? (p.bet>0?`베팅 ${p.bet}`:'베팅 대기'):(p.handName||''))}</span>
-      <span class="bal">🪙${p.balance.toLocaleString()}</span>
+  const felt = document.getElementById('tableFelt');
+  felt.querySelectorAll('.seat').forEach(el=>el.remove());
+
+  others.forEach((p, i)=>{
+    const pos = layout[i] || {l:50,t:40};
+    const seat = document.createElement('div');
+    seat.className = 'seat';
+    seat.style.left = pos.l + '%';
+    seat.style.top = pos.t + '%';
+    const isMyTurn = t.turnPlayerId === p.id;
+    const won = t.phase==='resolved' && p.result && p.result.startsWith('+');
+    let badgeText = p.isBanker ? '뱅커' : (t.phase==='betting' ? (p.bet>0?`베팅 ${p.bet}`:'베팅 대기') : '');
+    if(t.phase==='resolved' && p.hand.length && p.hand.every(c=>c!==null)) badgeText = `${handScore(p.hand)} Points`;
+    const miniCardsHtml = (p.hand||[]).map(c=> {
+      if(c===null || c===undefined) return '<div class="mini-card back"></div>';
+      const isRed = c.s==='♥'||c.s==='♦';
+      return `<div class="mini-card${isRed?' red':''}">${c.r}${c.s}</div>`;
+    }).join('');
+    seat.innerHTML = `
+      <div class="win-ribbon ${won?'show':''}">WIN</div>
+      <div class="avatar-ring ${isMyTurn?'active':''}">${p.isBanker?'👑':'🧑'}</div>
+      <div class="mini-cards">${miniCardsHtml}</div>
+      <div class="points-badge">${badgeText}</div>
+      <div class="name-tag">${p.name}</div>
     `;
-    list.appendChild(row);
+    felt.appendChild(seat);
   });
 
   const myCardsEl = document.getElementById('myCards');
   myCardsEl.innerHTML = '';
-  if(me && me.hand.length) me.hand.forEach(c => myCardsEl.appendChild(cardEl(c)));
+  if(me && me.hand.length) me.hand.forEach((c,i) => myCardsEl.appendChild(bigCardEl(c, i*100)));
+  document.getElementById('myNameTag').textContent = (me?me.name:'나') + (me && me.isBanker ? ' 👑' : '');
+  document.getElementById('myPointsBadge').textContent = (me && (me.hand.length===2||me.hand.length===3)) ? `${handScore(me.hand)} Points` : '- Points';
+
+  document.getElementById('myWin').classList.toggle('show', t.phase==='resolved' && me && me.result && me.result.startsWith('+'));
 
   const betRow = document.getElementById('betRow');
   const hitBtn = document.getElementById('hitBtn');
   const stayBtn = document.getElementById('stayBtn');
   const msg = document.getElementById('gameMsg');
   const countdownEl = document.getElementById('countdownMsg');
-
-  betRow.classList.add('hidden');
-  hitBtn.classList.add('hidden');
-  stayBtn.classList.add('hidden');
-  countdownEl.classList.add('hidden');
+  betRow.classList.add('hidden'); hitBtn.classList.add('hidden'); stayBtn.classList.add('hidden'); countdownEl.classList.add('hidden');
   if(countdownInterval) clearInterval(countdownInterval);
+  document.getElementById('resultsOverlay').classList.remove('show');
 
   if(t.phase === 'lobby'){
     if(t.countdownEndsAt){
       countdownEl.classList.remove('hidden');
       countdownInterval = setInterval(()=>{
         const secs = Math.max(0, Math.ceil((t.countdownEndsAt - Date.now())/1000));
-        countdownEl.textContent = `${secs}초 후 라운드 시작...`;
+        countdownEl.textContent = `${secs}초 후 시작`;
         if(secs<=0) clearInterval(countdownInterval);
       }, 250);
       msg.textContent = '플레이어 모집 완료 — 곧 시작합니다';
@@ -273,16 +544,38 @@ socket.on('tableUpdate', (t)=>{
   } else if(t.phase === 'turns'){
     if(t.turnPlayerId === myId){
       msg.textContent = '당신의 차례입니다 — 3번째 카드를 받으시겠습니까?';
-      hitBtn.classList.remove('hidden');
-      stayBtn.classList.remove('hidden');
+      hitBtn.classList.remove('hidden'); stayBtn.classList.remove('hidden');
     } else {
       const turnP = t.players.find(p=>p.id===t.turnPlayerId);
       msg.textContent = turnP ? `${turnP.name}님의 차례...` : '카드 정산 중...';
     }
   } else if(t.phase === 'resolved'){
     msg.textContent = me ? `${me.handName || ''} — ${me.result || ''}` : '라운드 종료';
+    showResults(t);
   }
 });
+
+function showResults(t){
+  const resultsList = document.getElementById('resultsList');
+  resultsList.innerHTML = '';
+  t.players.forEach(p=>{
+    const row = document.createElement('div');
+    row.className = 'result-row' + (p.id===myId ? ' me' : '');
+    const cardsHtml = (p.hand||[]).map(c=> c ? `<div class="result-mini-card${(c.s==='♥'||c.s==='♦')?' red':''}">${c.r}</div>` : '').join('');
+    const score = (p.hand && p.hand.every(c=>c!==null)) ? handScore(p.hand) : '-';
+    const deltaCls = (p.result||'').startsWith('+') ? 'pos' : ((p.result||'').startsWith('-') ? 'neg' : '');
+    const deltaTxt = p.result === 'push' ? 'Push' : (p.result || '0');
+    row.innerHTML = `
+      <div class="result-avatar">${p.isBanker?'👑':'🧑'}</div>
+      <div class="result-name">${p.name}${p.id===myId?' (나)':''}</div>
+      <div class="result-cards">${cardsHtml}</div>
+      <div class="result-points">${score} Points</div>
+      <div class="result-coin ${deltaCls}">${deltaTxt}</div>
+    `;
+    resultsList.appendChild(row);
+  });
+  document.getElementById('resultsOverlay').classList.add('show');
+}
 </script>
 </body>
 </html>
