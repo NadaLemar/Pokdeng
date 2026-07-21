@@ -1,0 +1,14 @@
+{
+  "name": "pokdeng-app",
+  "version": "1.0.0",
+  "description": "Pokdeng (포크덱) social multiplayer web app - virtual currency only, no real money gambling",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.8.3"
+  }
+}

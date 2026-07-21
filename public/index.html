@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>포크덩 · Pokdeng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- Top status bar: wallet -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-suit">♠</span>포크덩
+    </div>
+    <div class="wallet">
+      <button class="wallet-chip" id="chipDisplay" title="칩">
+        <span class="ico">🪙</span><span class="num" id="chipCount">0</span>
+      </button>
+      <button class="wallet-chip diamond" id="diamondDisplay" title="다이아">
+        <span class="ico">💎</span><span class="num" id="diamondCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ HOME TAB ============ -->
+  <section class="view" id="view-home">
+    <div class="home-hero">
+      <div class="hero-card-row" aria-hidden="true">
+        <div class="mini-card red">K♥</div>
+        <div class="mini-card black">A♠</div>
+        <div class="mini-card red">9♦</div>
+      </div>
+      <h1>포크덩에 오신 것을 환영해요</h1>
+      <p class="hero-sub">현금 없이, 칩으로만 즐기는 태국식 카드게임</p>
+    </div>
+
+    <div class="home-grid">
+      <button class="home-action primary" id="btnQuickPlay">
+        <span class="ha-emoji">🃏</span>
+        <span class="ha-title">빠른 매칭</span>
+        <span class="ha-desc">바로 테이블에 앉기</span>
+      </button>
+      <button class="home-action" id="btnFreeChips">
+        <span class="ha-emoji">🎁</span>
+        <span class="ha-title">무료 칩 받기</span>
+        <span class="ha-desc" id="freeChipTimer">지금 받기 가능</span>
+      </button>
+    </div>
+
+    <h2 class="section-title">내 전적</h2>
+    <div class="stat-strip">
+      <div class="stat-box"><div class="stat-num" id="statWins">0</div><div class="stat-label">승</div></div>
+      <div class="stat-box"><div class="stat-num" id="statLosses">0</div><div class="stat-label">패</div></div>
+      <div class="stat-box"><div class="stat-num" id="statPushes">0</div><div class="stat-label">무</div></div>
+      <div class="stat-box"><div class="stat-num" id="statGames">0</div><div class="stat-label">총 판수</div></div>
+    </div>
+
+    <h2 class="section-title">알아두면 좋은 규칙</h2>
+    <div class="rules-list">
+      <div class="rule-item"><span class="rule-tag pok">Pok 8/9</span>2장 합이 8 또는 9면 바로 승부!</div>
+      <div class="rule-item"><span class="rule-tag tong">통 Tong</span>같은 숫자 3장, 배당 5배</div>
+      <div class="rule-item"><span class="rule-tag sian">시안 Sian</span>같은 무늬 K·Q·J, 배당 3배</div>
+      <div class="rule-item"><span class="rule-tag straight">리앙 Straight</span>같은 무늬 3연속 숫자, 배당 3배</div>
+    </div>
+  </section>
+
+  <!-- ============ PLAY TAB (Lobby + Table) ============ -->
+  <section class="view" id="view-play">
+    <div id="lobbyPane">
+      <h1 class="view-title">🃏 포크덩 테이블</h1>
+      <p class="view-sub">베팅 단계를 선택해서 입장하세요</p>
+      <div id="tierList" class="tier-list"></div>
+    </div>
+
+    <div id="tablePane" class="hidden">
+      <div class="table-topbar">
+        <button id="btnLeaveTable" class="leave-btn">← 나가기</button>
+        <div class="table-info">
+          <span id="tableTierName">-</span>
+          <span class="table-bet">베팅 <b id="tableBetAmount">0</b> 🪙</span>
+        </div>
+        <div class="phase-pill" id="phasePill">대기중</div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="oval-table" id="ovalTable">
+          <div class="table-center">
+            <div class="deck-stack" id="deckStack">🂠</div>
+            <div class="countdown" id="countdownNum"></div>
+          </div>
+          <div class="seats" id="seatsContainer"></div>
+        </div>
+      </div>
+
+      <div class="action-bar" id="actionBar">
+        <div class="action-msg" id="actionMsg">다른 플레이어를 기다리는 중...</div>
+        <div class="action-buttons hidden" id="actionButtons">
+          <button class="act-btn stay" id="btnStay">스테이</button>
+          <button class="act-btn draw" id="btnDraw">드로우</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MARKET TAB ============ -->
+  <section class="view" id="view-market">
+    <h1 class="view-title">💎 마켓</h1>
+    <p class="view-sub">다이아는 스토어 결제(모의), 칩은 게임 베팅용이에요</p>
+
+    <h2 class="section-title">무료 칩</h2>
+    <div class="market-card free-card">
+      <div class="mc-left">
+        <div class="mc-emoji">🎁</div>
+        <div>
+          <div class="mc-title">4시간마다 무료 칩</div>
+          <div class="mc-desc" id="marketFreeStatus">지금 받을 수 있어요</div>
+        </div>
+      </div>
+      <button class="mc-btn" id="btnMarketFreeChips">받기</button>
+    </div>
+
+    <h2 class="section-title">다이아 구매 (모의 결제)</h2>
+    <div class="diamond-grid" id="diamondPackages"></div>
+
+    <h2 class="section-title">다이아 → 칩 교환</h2>
+    <div class="exchange-card">
+      <div class="exchange-rate">💎 1개 = 🪙 1,000</div>
+      <div class="exchange-row">
+        <input type="number" id="exchangeInput" min="1" placeholder="교환할 다이아 수" />
+        <button id="btnExchange">교환</button>
+      </div>
+      <div class="exchange-presets">
+        <button class="preset-btn" data-amt="10">10💎</button>
+        <button class="preset-btn" data-amt="50">50💎</button>
+        <button class="preset-btn" data-amt="100">100💎</button>
+        <button class="preset-btn" data-amt="all">전부</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MY PAGE TAB ============ -->
+  <section class="view" id="view-mypage">
+    <h1 class="view-title">👤 마이페이지</h1>
+
+    <div class="profile-card">
+      <div class="avatar">🂡</div>
+      <div class="profile-name" id="profileNickname">손님</div>
+      <button class="edit-btn" id="btnEditNickname">닉네임 변경</button>
+    </div>
+
+    <h2 class="section-title">누적 전적</h2>
+    <div class="stat-strip">
+      <div class="stat-box"><div class="stat-num" id="mpWins">0</div><div class="stat-label">승</div></div>
+      <div class="stat-box"><div class="stat-num" id="mpLosses">0</div><div class="stat-label">패</div></div>
+      <div class="stat-box"><div class="stat-num" id="mpPushes">0</div><div class="stat-label">무</div></div>
+      <div class="stat-box"><div class="stat-num" id="mpWinRate">0%</div><div class="stat-label">승률</div></div>
+    </div>
+
+    <h2 class="section-title">설정</h2>
+    <div class="settings-list">
+      <div class="setting-row">
+        <span>🔊 사운드 효과</span>
+        <label class="switch">
+          <input type="checkbox" id="soundToggle" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="setting-row">
+        <span>🆔 내 고유 ID</span>
+        <span class="mono-id" id="myClientId">-</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom navigation -->
+  <nav class="tabbar">
+    <button class="tab-btn active" data-view="home"><span class="tab-ico">🏠</span><span>홈</span></button>
+    <button class="tab-btn" data-view="play"><span class="tab-ico">🃏</span><span>포크덩</span></button>
+    <button class="tab-btn" data-view="market"><span class="tab-ico">💎</span><span>마켓</span></button>
+    <button class="tab-btn" data-view="mypage"><span class="tab-ico">👤</span><span>마이페이지</span></button>
+  </nav>
+
+  <!-- Results modal -->
+  <div class="modal-overlay hidden" id="resultsModal">
+    <div class="results-modal">
+      <div class="win-ribbon hidden" id="winRibbon">WIN</div>
+      <h2 id="resultsTitle">결과</h2>
+      <div id="resultsBody" class="results-body"></div>
+      <button class="mc-btn" id="btnCloseResults">확인</button>
+    </div>
+  </div>
+
+  <!-- Nickname edit modal -->
+  <div class="modal-overlay hidden" id="nicknameModal">
+    <div class="results-modal small">
+      <h2>닉네임 변경</h2>
+      <input type="text" id="nicknameInput" maxlength="12" placeholder="새 닉네임 (2~12자)" />
+      <div class="modal-btn-row">
+        <button class="mc-btn ghost" id="btnCancelNickname">취소</button>
+        <button class="mc-btn" id="btnSaveNickname">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast hidden" id="toast"></div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/client.js"></script>
+</body>
+</html>
